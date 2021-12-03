@@ -23,7 +23,7 @@ export default function Sidebar() {
    const { data: session, status } = useSession()
 
    return (
-      <div className="text-gray-500 p-5 text-sm md:text-base border-r border-gray-500">
+      <div className="text-gray-500 p-5 text-sm md:text-base border-r border-gray-500 overflow-y-scroll h-screen scrollbar-hide max-w-[15rem]">
          <div className="space-y-4">
             {BarBtns.map((btn, index) => (
                <Fragment key={index}>
@@ -42,10 +42,10 @@ export default function Sidebar() {
             </button>
 
             {/* Playlist */}
-            {[...Array(15)].map((x) => (
-               <p key={x} className="cursor-pointer hover:text-white">
-                  Playlist Name...
-               </p>
+            {[...Array(15)].map((x, i) => (
+               <div key={i}>
+                  <p className="cursor-pointer hover:text-white">Playlist Name..</p>
+               </div>
             ))}
          </div>
       </div>
