@@ -1,31 +1,28 @@
-import { Fragment } from "react"
-import { signOut, useSession } from "next-auth/react"
-import {
-   HomeIcon,
-   SearchIcon,
-   LibraryIcon,
-   PlusCircleIcon,
-   HeartIcon,
-   RssIcon,
-   LogoutIcon,
-} from "@heroicons/react/outline"
-
-const BarBtns = [
-   { name: "Home", icon: HomeIcon },
-   { name: "Search", icon: SearchIcon },
-   { name: "Your Library", icon: LibraryIcon },
-   { name: "Create Playlist", icon: PlusCircleIcon },
-   { name: "Liked Songs", icon: HeartIcon },
-   { name: "Your Episodes", icon: RssIcon },
-]
+import { Fragment, useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
+import sideBtns from "../utils/sideBtns"
+import useSpotify from "../hooks/useSpotify"
+import { useRecoilState } from "recoil"
+import { playlistIdState } from "../atoms/playlistAtom"
 
 export default function Sidebar() {
-   const { data: session, status } = useSession()
+   const { data: session } = useSession()
+   const [playlists, setPlaylists] = useState([])
+   const spotifyApi = useSpotify()
+   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState)
+
+   useEffect(() => {
+      if (spotifyApi.getAccessToken()) {
+         spotifyApi.getUserPlaylists().then((data) => {
+            setPlaylists(data.body.items)
+         })
+      }
+   }, [session, spotifyApi])
 
    return (
-      <div className="text-gray-500 p-5 text-sm md:text-base border-r border-gray-500 overflow-y-scroll h-screen scrollbar-hide max-w-[15rem]">
+      <div className="text-gray-500 p-5 pb-28 text-xs lg:text-sm border-r border-gray-500 overflow-y-scroll h-screen scrollbar-hide sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex">
          <div className="space-y-4">
-            {BarBtns.map((btn, index) => (
+            {sideBtns.map((btn, index) => (
                <Fragment key={index}>
                   <button className="flex items-center space-x-2 hover:text-white">
                      <btn.icon className="h-5 w-5" />
@@ -36,16 +33,26 @@ export default function Sidebar() {
                </Fragment>
             ))}
 
-            <button onClick={() => signOut()} className="flex items-center space-x-2 hover:text-white">
+            {/* <button onClick={() => signOut()} className="flex items-center space-x-2 hover:text-white">
                <LogoutIcon className="h-5 w-5" />
                <span>Log Out</span>
-            </button>
+            </button> */}
 
             {/* Playlist */}
-            {[...Array(15)].map((x, i) => (
-               <div key={i}>
-                  <p className="cursor-pointer hover:text-white">Playlist Name..</p>
-               </div>
+            <h2 className="text-xl font-semibold text-gray-300">Playlists</h2>
+            {playlists.map((playlist, index) => (
+               <Fragment key={index}>
+                  <button
+                     title={playlist.name}
+                     className="flex items-center space-x-2 hover:text-white"
+                     onClick={() => setPlaylistId(playlist.id)}
+                  >
+                     {/* <img src={playlist.images[0].url} alt="" className="w-10 h-10 rounded-lg" /> */}
+                     <div className="w-[12ch] md:w-[22ch] text-left">
+                        <h3 className="truncate ">{playlist.name}</h3>
+                     </div>
+                  </button>
+               </Fragment>
             ))}
          </div>
       </div>
