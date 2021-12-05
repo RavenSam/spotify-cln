@@ -2,15 +2,23 @@ import { useSession } from "next-auth/react"
 import { ChevronDownIcon } from "@heroicons/react/outline"
 import { useEffect, useState } from "react"
 import { shuffle } from "lodash"
-import colors from "../utils/colors"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { playlistIdState, playlistState } from "../atoms/playlistAtom"
 import useSpotify from "../hooks/useSpotify"
 import Tracks from "./Songs"
 
+const colors = [
+   "from-[#79018C]",
+   "from-[#6E3CBC]",
+   "from-[#0F2C67]",
+   "from-[#32C1CD]",
+   "from-[#009DAE]",
+   "from-[#AA14F0]",
+]
+
 export default function Center() {
    const { data: session } = useSession()
-   const [color, setColor] = useState("from-indigo-600")
+   const [color, setColor] = useState(null)
    const playlistId = useRecoilValue(playlistIdState)
    const [playlist, setPlaylist] = useRecoilState(playlistState)
    const spotifyApi = useSpotify()
@@ -37,7 +45,7 @@ export default function Center() {
                </div>
             </div>
 
-            <section className={`flex items-end space-x-7 bg-gradient-to-b to-black ${color} text-white h-80 p-8 `}>
+            <section className={`flex items-end space-x-7 bg-gradient-to-b ${color} to-black  text-white h-80 p-8 `}>
                <img src={playlist?.images[0]?.url} alt={playlist?.name} className="w-44 h-44 shadow-xl rounded-md" />
                <div className="">
                   <p className="capitalize">playlist</p>

@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
-import sideBtns from "../utils/sideBtns"
+import { sideBtns } from "../utils/iconsBtns"
 import useSpotify from "../hooks/useSpotify"
 import { useRecoilState } from "recoil"
 import { playlistIdState } from "../atoms/playlistAtom"

@@ -1,13 +1,31 @@
 import useSpotify from "../hooks/useSpotify"
 import { millisToMinutesAndSeconds as duration } from "../lib/duration"
+import { useRecoilState } from "recoil"
+import { currentTrackIdState, isPlayingState } from "../atoms/songAtom"
 
 export default function Song({ track, order }) {
    const spotifyApi = useSpotify()
+   const [currentTrackId, setCurrentTrackId] = useRecoilState(currentTrackIdState)
+   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState)
+
+   const playing = async () => {
+      try {
+         setCurrentTrackId(track.id)
+         setIsPlaying(true)
+
+         // spotifyApi.play({ uris: track.uri })
+      } catch (error) {
+         console.log(error)
+      }
+   }
 
    return (
-      <div className="grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 rounded-lg cursor-pointer">
+      <div
+         className="grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 rounded-lg cursor-pointer"
+         onClick={playing}
+      >
          <div className="flex items-center  space-x-4">
-            <p className="">{order + 1}</p>
+            <p className="w-5 text-right">{order + 1}</p>
             <img src={track?.album.images[0].url} alt={track.name} className="h-10 w-10 rounded-md" />
 
             <div className="w-48 lg:w-64">
