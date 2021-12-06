@@ -46,7 +46,7 @@ export default function Player() {
    const debounceAdjuster = useCallback(
       debounce((volume) => {
          // set the volume with spotify API
-         // spotifyApi.setVolume(volume)
+         spotifyApi.setVolume(volume)
       }, 500),
       []
    )
@@ -82,7 +82,7 @@ export default function Player() {
 
          <div className="hidden sm:flex items-center justify-end space-x-3 py-5 ">
             {volumeBtns.map((btn, i) => (
-               <Fragment key={btn.title}>
+               <Fragment key={i}>
                   <btn.icon
                      className="cursor-pointer w-5 h-5"
                      onClick={() =>

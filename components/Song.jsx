@@ -13,7 +13,7 @@ export default function Song({ track, order }) {
          setCurrentTrackId(track.id)
          setIsPlaying(true)
 
-         // spotifyApi.play({ uris: track.uri })
+         spotifyApi.play({ uris: track.uri })
       } catch (error) {
          console.log(error)
       }
